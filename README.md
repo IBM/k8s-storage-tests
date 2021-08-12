@@ -40,6 +40,7 @@ The following tests are performed:
  
    ```
     ocp_url: https://<required>:6443
+    ocp_username: <required>
     ocp_password: <required>
    ```
   
