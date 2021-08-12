@@ -1,0 +1,68 @@
+
+# OCP Parameters
+ocp_url: https://<required>:6443
+ocp_username: <required>  # a cluster admin user
+ocp_password: <required>
+
+run_storage_readiness: true
+
+############################ STORAGE VALIDATION PARAMETERS START ########################
+
+# REQUIRED PARAMETERS
+storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: <required>  # eg "ocs-storagecluster-cephfs"
+storage_validation_namespace: <required>
+
+# OPTIONAL PARAMETERS
+prefix: "readiness"
+storageSize: "1Gi"
+options: ""
+backoffLimit: 5
+
+############################ STORAGE VALIDATION PARAMETERS END ##########################
+
+############################ STORAGE PERFORMANCE PARAMETERS START #######################
+# vars file for roles/storage-perf-test
+run_storage_perf: false
+storage_perf_namespace: <optional>  # for performance run only
+logfolder: '.logs'
+imageurl: quay.io/ibm-cp4d-public/xsysbench:latest
+
+cluster_environment: AWS
+cluster_name: storage-validation-cluster
+storage_type: portworx
+rwx_storagesize: 10Gi
+rwx_storageclass: <optional> # for performance run only
+rwo_storagesize: 10Gi
+rwo_storageclass: <optional> # for performance run only
+
+#sysbench ocs random read
+sysbench_random_read: true
+rread_threads: 1,4,8,16
+rread_fileTotalSize: 128m
+rread_fileNum: 128
+rread_fileBlockSize: 4k,8k,16k
+
+#sysbench ocs random write
+sysbench_random_write: true
+rwrite_threads: 1,4,8,16
+rwrite_fileTotalSize: 4096m
+rwrite_fileNum: 4
+rwrite_fileBlockSize: 4k,8k,16k
+
+#sysbench ocs sequential read
+sysbench_sequential_read: true
+sread_threads: 1,2
+sread_fileTotalSize: 4096m
+sread_fileNum: 4
+sread_fileBlockSize: 512m,1g
+
+#sysbench ocs sequential write
+sysbench_sequential_write: true
+swrite_threads: 1,2
+swrite_fileTotalSize: 4096m
+swrite_fileNum: 4
+swrite_fileBlockSize: 512m,1g
+
+############################ STORAGE PERFORMANCE PARAMETERS END #########################
+

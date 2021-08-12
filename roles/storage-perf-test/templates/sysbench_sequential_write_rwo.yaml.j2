@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sysbench-sequential-write-rwo
+  namespace: "{{ storage_perf_namespace }}"
+spec:
+  template:
+    metadata:
+      name: sysbench-sequential-write-rwo
+    spec:
+      containers:
+      - name: sysbench-sequential-write-rwo
+        image: {{ imageurl }}
+        command: ["python3"]
+        args:
+          - '/tmp/sysbench.py'
+          - '{{ swrite_threads }}'
+          - '{{ swrite_fileTotalSize }}'
+          - '{{ swrite_fileNum }}'
+          - 'seqwr'
+          - '{{ swrite_fileBlockSize }}'
+          - 'async'
+          - '0'
+          - 'dsync'
+          - '{{ cluster_environment }}'
+          - '{{ cluster_name }}'
+          - '{{ storage_type }}'
+          - 'pvc-sysbench-rwo'
+        volumeMounts:
+        - name: tmp-store
+          mountPath: /tmp/data
+      volumes:
+      - name: tmp-store
+        persistentVolumeClaim:
+          claimName: pvc-sysbench-rwo
+          readOnly: false
+      restartPolicy: Never

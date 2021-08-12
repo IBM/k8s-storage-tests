@@ -1,0 +1,23 @@
+---
+# Run sysbench test
+- name:  Run sysbench random write RWO test
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'sysbench_random_write_rwo.yaml.j2') }}"
+
+- name: Wait X seconds/minutes for tests to run
+  pause:
+    minutes: 10
+
+- name: Get logs of the sysbench random write pod for RWO
+  community.kubernetes.k8s_log:
+    namespace: "{{ storage_perf_namespace }}"
+    label_selectors:
+    - job-name=sysbench-random-write-rwo
+  register: logo
+
+- name: Save random write Log to local file
+  local_action: 
+    module: copy 
+    content: "{{ logo }}"
+    dest: "{{ logfolder }}/random_write_rwo.json"

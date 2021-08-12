@@ -1,0 +1,10 @@
+# REQUIRED PARAMETERS
+storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd"
+storageClass_ReadWriteMany: <required> # eg "ocs-storagecluster-cephfs"
+namespace: <required>
+
+# OPTIONAL
+prefix: "readiness"
+storageSize: "1Gi"
+options: ""
+backoffLimit: 5

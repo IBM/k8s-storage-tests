@@ -1,0 +1,25 @@
+---
+
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+  - name: ocp login
+    shell: oc login {{ ocp_url }} -u {{ ocp_username }} -p {{ ocp_password }} --insecure-skip-tls-verify=true
+    register: shell_out
+
+  - debug:
+      var: shell_out.stdout_lines
+
+  # Storage Validation Suite
+  - name: Storage Readiness
+    include_role:
+      name: storage-readiness
+    when: run_storage_readiness
+
+  # Storage Performance Collection Suite
+  - name: Storage Performance
+    include_role:
+      name: storage-perf-test
+    when: run_storage_perf

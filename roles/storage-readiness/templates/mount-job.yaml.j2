@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ prefix }}-mount-job-{{ accessMode|lower}}"
+spec:
+  template:
+    metadata:
+      name: mount-job
+    spec:
+      containers:
+      - name: mount-job
+        image: quay.io/centos/amd64
+        imagePullPolicy: "IfNotPresent"
+        command: ["sh"]
+        args:
+          - '-c'
+          - 'echo "volume mounted";echo "writing data" > /tmp/data/{{ prefix }}'
+        volumeMounts:
+        - name: tmp-store
+          mountPath: /tmp/data
+      volumes:
+      - name: tmp-store
+        persistentVolumeClaim:
+          claimName: "{{ prefix }}-{{ accessMode|lower }}"
+      restartPolicy: Never
