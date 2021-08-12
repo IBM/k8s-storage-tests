@@ -13,7 +13,7 @@ The following tests are performed:
  - Sequential [Read Write Consistency](./roles/storage-readiness/README.md#read-write-tests) from single and multiple nodes
  - Parallel Read Write Consistency from single and multiple nodes
  - Parallel Read Write Consistency across multiple threads
- - Accessibility based on POSIX compliant [Group ID Permissions]((./roles/storage-readiness/README.md#gid-tests))
+ - Accessibility based on POSIX compliant [Group ID Permissions](./roles/storage-readiness/README.md#gid-tests)
  - [SubPath](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath) test for volumes
 
 ### Prerequisites
