@@ -30,9 +30,9 @@ The following tests are performed:
   
   `ansible-galaxy collection install community.kubernetes`
   
- - Install [OpenShift Client 4.6 or later](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.6.31) based on your OS. 
+- Install [OpenShift Client 4.6 or later](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.6.31) based on your OS. 
   
-- An OpenShift Cluster with cluster admin access setup with RWX and RWO storage classes that you want to test
+- Access to the OpenShift Cluster (at least 3 compute nodes) setup with RWX and RWO storage classes with cluster admin access.
 
 ### Setup
   
