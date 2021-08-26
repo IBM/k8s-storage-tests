@@ -3,6 +3,7 @@
 ocp_url: https://<required>:6443
 ocp_username: <required>  # a cluster admin user
 ocp_password: <required>
+ocp_token: <required if user/password not available>
 
 run_storage_readiness: true
 

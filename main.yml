@@ -5,12 +5,23 @@
 
   tasks:
 
-  - name: ocp login
+  - name: ocp login using creds
     shell: oc login {{ ocp_url }} -u {{ ocp_username }} -p {{ ocp_password }} --insecure-skip-tls-verify=true
-    register: shell_out
+    register: login_creds
+    when: (ocp_username != '' and ocp_username != '<required>') and (ocp_password != '' and ocp_password != '<required>') 
+
+  - name: ocp login using token
+    shell: oc login --server={{ ocp_url }} --token={{ ocp_token }} --insecure-skip-tls-verify=true
+    register: login_token
+    when: (ocp_token != '' and ocp_token != '<required if user/password not available>')
 
   - debug:
-      var: shell_out.stdout_lines
+      var: login_creds.stdout_lines
+    when: login_creds.stdout_lines is defined
+
+  - debug:
+      var: login_token.stdout_lines
+    when: login_token.stdout_lines is defined    
 
   # Storage Validation Suite
   - name: Storage Readiness

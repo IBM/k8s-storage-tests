@@ -18,7 +18,13 @@ The following tests are performed:
 
 ### Prerequisites
 
-- Install Ansible using [pip](https://pip.pypa.io/en/stable/installation/)
+- Ensure you have python 3.6 or later and [pip](https://pip.pypa.io/en/stable/installation/) 21.1.3 or later installed
+
+  `python --version`
+
+  `pip --version`
+
+- Install Ansible
   
   `pip install ansible`
 
@@ -35,6 +41,8 @@ The following tests are performed:
 - An OpenShift Cluster with cluster admin access setup with RWX and RWO storage classes that you want to test
 
 ### Setup
+
+ - Clone this git repo to your client
   
  - Update the `params.yml` file with your OCP URL and Credentials
  
@@ -42,6 +50,7 @@ The following tests are performed:
     ocp_url: https://<required>:6443
     ocp_username: <required>
     ocp_password: <required>
+    ocp_token: <required if user/password not available>
    ```
   
  - Update the `params.yml` file for the `required` storage parameters
@@ -57,7 +66,13 @@ The following tests are performed:
  - From the root of this repository, run:
   
   ```bash
-    ansible-playbook main.yml --extra-vars "@./params.yml"
+    ansible-playbook main.yml --extra-vars "@./params.yml" | tee output.log
+  ```
+
+  If the playbook fails to run due to SSL verification error, you can disable it by setting this environment variable before running the playbook
+
+  ```
+  export K8S_AUTH_VERIFY_SSL=no
   ```
 
  - On a successful run, you should see the following output
