@@ -5,6 +5,6 @@ metadata:
 data:
   consume.sh: |
     echo "Reading checksums"
-    md5sum $FILE_NAME > /tmp/data/consumer.md5
-    checksum=$(cat /tmp/data/consumer.md5)
+    md5sum $FILE_NAME > /mnt/data/consumer.md5
+    checksum=$(cat /mnt/data/consumer.md5)
     echo "current checksum $checksum"

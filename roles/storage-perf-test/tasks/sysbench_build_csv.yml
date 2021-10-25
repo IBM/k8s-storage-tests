@@ -1,6 +1,0 @@
----
-# Build CSV file
-- name: Create CSV file
-  ansible.builtin.script: jsontocsv.py '.logs'
-  args:
-    executable: python3
