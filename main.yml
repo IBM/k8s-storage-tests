@@ -8,12 +8,12 @@
   - name: ocp login using creds
     shell: oc login {{ ocp_url }} -u {{ ocp_username }} -p {{ ocp_password }} --insecure-skip-tls-verify=true
     register: login_creds
-    when: (ocp_username != '' and ocp_username != '<required>') and (ocp_password != '' and ocp_password != '<required>') 
+    when: (not ocp_token or ocp_token == '<required if user/password not available>')
 
   - name: ocp login using token
     shell: oc login --server={{ ocp_url }} --token={{ ocp_token }} --insecure-skip-tls-verify=true
     register: login_token
-    when: (ocp_token != '' and ocp_token != '<required if user/password not available>')
+    when: (not ocp_username or ocp_username == '<required>' or not ocp_password or ocp_password == '<required>') 
 
   - debug:
       var: login_creds.stdout_lines
