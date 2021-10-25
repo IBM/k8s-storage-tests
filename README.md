@@ -15,7 +15,7 @@ The following tests are performed:
  - Parallel Read Write Consistency across multiple threads
  - Accessibility based on POSIX compliant [Group ID Permissions](./roles/storage-readiness/README.md#gid-tests)
  - [SubPath](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath) test for volumes
- - [File Locking](https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/) test
+ - [File Locking](https://pubs.opengroup.org/onlinepubs/9699919799/functions/fcntl.html) test
  
 ### Prerequisites
 
