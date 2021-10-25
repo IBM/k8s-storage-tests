@@ -8,3 +8,5 @@ prefix: "readiness"
 storageSize: "1Gi"
 options: ""
 backoffLimit: 5
+
+run_storage_readiness: true

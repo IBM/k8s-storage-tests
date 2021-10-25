@@ -101,7 +101,17 @@
     include_tasks: volume-subpath-test.yaml 
   rescue:
     - debug:
-        msg: "Subpath tests {{ accessMode }} for {{ accessMode }} - FAILED"
+        msg: "Subpath tests for {{ accessMode }} - FAILED"
+  vars:
+    accessMode: ReadWriteMany
+
+- name: File locks tests {{ accessMode }}
+  block:
+  - name: File locks tests
+    include_tasks: file-lock-test.yaml 
+  rescue:
+    - debug:
+        msg: "File locks tests for - FAILED"
   vars:
     accessMode: ReadWriteMany
 

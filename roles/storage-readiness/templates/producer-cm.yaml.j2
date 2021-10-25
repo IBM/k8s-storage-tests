@@ -20,3 +20,60 @@ data:
     echo "copying to file $FILE_NAME_GID"
     cp -p /home/cpuser/$FILE_NAME_GID /tmp/data/$FILE_NAME_GID
     ls -la /tmp/data/$FILE_NAME_GID
+  file-lock.sh: |
+    set -ex
+    scriptname=$(basename $0)
+    lock="${FILE_NAME}"
+    exec 200>$lock
+    flock -n 200 || exit 1
+    echo "Lock acquired"
+    pid=$$
+    echo $pid 1>&200
+    sleep 60
+    echo "Lock released"
+  lock-file.c: |
+    #include <stdlib.h>
+    #include <fcntl.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include <unistd.h>
+
+    int main (int argc, char* argv[])
+    {
+      char* file = argv[1];
+      int fd;
+      int exitcode;
+      struct flock lock;
+
+      printf ("opening %s\n", file);
+      /* Open a file descriptor to the file. */
+      fd = open (file, O_WRONLY);
+      printf ("locking\n");
+      /* Initialize the flock structure. */
+      memset (&lock, 0, sizeof(lock));
+      lock.l_type = F_WRLCK;
+      /* Place a write lock on the file. */
+      exitcode = fcntl (fd, F_SETLK, &lock);
+
+      if(exitcode == 0){
+        printf ("Acquired lock, retaining for a minute\n"); 
+        sleep(60);
+        printf ("unlocking\n");
+        /* Release the lock. */
+        lock.l_type = F_UNLCK;
+        fcntl (fd, F_SETLK, &lock);
+        close (fd);
+        return 0;
+      }
+      else{
+        printf ("Unable to acquire lock\n");
+        return (EXIT_FAILURE); 
+      }
+    }
+  lock-file.sh: |
+    set -ex
+    touch ${FILE_NAME}
+    gcc -o /tmp/lock-file /tmp/lock-file.c
+    /tmp/lock-file ${FILE_NAME}
+    ecode=$?
+    exit $ecode
