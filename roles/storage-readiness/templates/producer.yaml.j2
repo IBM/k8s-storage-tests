@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME
-            value: "/tmp/data/sample.txt"
+            value: "/mnt/data/sample.txt"
         command:
         - "/bin/sh"
         - "-ec"
@@ -41,7 +41,7 @@ spec:
           /tmp/produce.sh
         volumeMounts:
         - name: tmp-store
-          mountPath: /tmp/data
+          mountPath: /mnt/data
         - name: produce-conf 
           mountPath: /tmp/produce.sh
           subPath: produce.sh 

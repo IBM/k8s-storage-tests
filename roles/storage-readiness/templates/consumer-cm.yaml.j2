@@ -5,9 +5,9 @@ metadata:
 data:
   consume.sh: |
     echo "Reading checksums"
-    md5sum $FILE_NAME > /tmp/data/consumer.md5
-    chk1=$(cat /tmp/data/producer.md5 | awk '{ print $1}')
-    chk2=$(cat /tmp/data/consumer.md5 | awk '{ print $1}')
+    md5sum $FILE_NAME > /mnt/data/consumer.md5
+    chk1=$(cat /mnt/data/producer.md5 | awk '{ print $1}')
+    chk2=$(cat /mnt/data/consumer.md5 | awk '{ print $1}')
     echo "chk1 $chk1"
     echo "chk2 $chk2"
     if [ "$chk1" != "$chk2" ]
@@ -20,13 +20,13 @@ data:
   read-file.sh: |
     set -xe
     id
-    echo "reading file /tmp/data/$FILE_NAME_GID"
-    ls -la /tmp/data/$FILE_NAME_GID
-    tail -1 /tmp/data/$FILE_NAME_GID
+    echo "reading file /mnt/data/$FILE_NAME_GID"
+    ls -la /mnt/data/$FILE_NAME_GID
+    tail -1 /mnt/data/$FILE_NAME_GID
   update-file.sh: |
     set -xe
     id
-    echo "writing to file /tmp/data/$FILE_NAME_GID"
-    ls -la /tmp/data/$FILE_NAME_GID
-    echo "\nmodifying with user group $TEST_GID" >> /tmp/data/$FILE_NAME_GID
-    tail -1 /tmp/data/$FILE_NAME_GID
+    echo "writing to file /mnt/data/$FILE_NAME_GID"
+    ls -la /mnt/data/$FILE_NAME_GID
+    echo "\nmodifying with user group $TEST_GID" >> /mnt/data/$FILE_NAME_GID
+    tail -1 /mnt/data/$FILE_NAME_GID

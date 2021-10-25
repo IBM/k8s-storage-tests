@@ -14,7 +14,7 @@ spec:
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME
-            value: "/tmp/data/file-lock.dat"
+            value: "/mnt/data/file-lock.dat"
         command:
         - "/bin/sh"
         - "-ec"
@@ -22,7 +22,7 @@ spec:
           /tmp/file-lock.sh
         volumeMounts:
         - name: tmp-store
-          mountPath: /tmp/data
+          mountPath: /mnt/data
         - name: produce-conf 
           mountPath: /tmp/file-lock.sh
           subPath: file-lock.sh 

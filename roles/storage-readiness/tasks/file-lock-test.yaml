@@ -30,6 +30,10 @@
   vars:
     type: create-lock
 
+- name: Wait few seconds
+  pause:
+    seconds: 20
+
 - name: Negative file lock test for {{ prefix }}
   k8s:
     state: present
@@ -84,6 +88,10 @@
      - name: file-lock-fcntl.yaml.j2
   vars:
     type: create-lock
+
+- name: Wait few seconds
+  pause:
+    seconds: 20
 
 - name: Negative Fcntl test for {{ prefix }}
   k8s:

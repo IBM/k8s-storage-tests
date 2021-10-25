@@ -14,10 +14,10 @@ spec:
         command: ["sh"]
         args:
           - '-c'
-          - 'echo "volume mounted";echo "writing data" > /tmp/data/{{ prefix }}'
+          - 'echo "volume mounted";echo "writing data" > /mnt/data/{{ prefix }}'
         volumeMounts:
         - name: tmp-store
-          mountPath: /tmp/data
+          mountPath: /mnt/data
       volumes:
       - name: tmp-store
         persistentVolumeClaim:

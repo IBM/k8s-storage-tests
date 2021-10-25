@@ -36,7 +36,7 @@ spec:
           /tmp/read-file.sh 
         volumeMounts:
         - name: tmp-store
-          mountPath: /tmp/data
+          mountPath: /mnt/data
         - name: consumer-conf 
           mountPath: /tmp/read-file.sh
           subPath: read-file.sh
