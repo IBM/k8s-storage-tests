@@ -89,6 +89,7 @@ The following tests are performed:
   ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteMany Volume ########################
   ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteOnce Volume ########################
   ######################## SUB PATH TEST PASSED FOR ReadWriteMany Volume ################################
+  ######################### FILE LOCK TESTS PASSED FOR ReadWriteMany Volume #############################
  ```
 
 ## Clean-up Resources
