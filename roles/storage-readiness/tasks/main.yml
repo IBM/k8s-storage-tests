@@ -111,7 +111,7 @@
     include_tasks: file-lock-test.yaml 
   rescue:
     - debug:
-        msg: "File locks tests for - FAILED"
+        msg: "File locks tests - FAILED"
   vars:
     accessMode: ReadWriteMany
 
