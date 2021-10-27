@@ -53,3 +53,7 @@ spec:
           defaultMode: 0755
           name: producer-cm 
       restartPolicy: Never
+{% if accessMode=='ReadWriteOnce' %}
+      securityContext:
+         fsGroup: 1000
+{% endif %}

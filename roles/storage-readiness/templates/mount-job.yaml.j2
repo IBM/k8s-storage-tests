@@ -23,3 +23,8 @@ spec:
         persistentVolumeClaim:
           claimName: "{{ prefix }}-{{ accessMode|lower }}"
       restartPolicy: Never
+{% if accessMode=='ReadWriteOnce' %}
+      securityContext:
+         fsGroup: 1000
+{% endif %}
+

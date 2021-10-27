@@ -46,6 +46,8 @@ spec:
         supplementalGroups: [{{ test_supplemental_group }}]
 {% elif test_supplemental_group is defined and accessMode=='ReadWriteOnce' %}
         fsGroup: {{ test_supplemental_group }}
+{% elif accessMode=='ReadWriteOnce' %}
+        fsGroup: {{ test_gid }}
 {% endif %}
         runAsGroup: {{ test_gid }}
 {% if test_supplemental_group is defined and accessMode=='ReadWriteOnce' %}
