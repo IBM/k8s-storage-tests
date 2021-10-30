@@ -45,7 +45,7 @@
       namespace: "{{ storage_validation_namespace }}"
       definition: "{{ lookup('template', item.name) | from_yaml }}"
       wait: yes
-      wait_timeout: 50
+      wait_timeout: "{{ 120 if accessMode=='ReadWriteOnce' else 50 }}"
       wait_condition:
         type: Complete
         status: "True"
@@ -64,8 +64,8 @@
     vars:  
       type: parallel
 
-  - name: Fail if producer job is already completed
-    fail:
+  - name: Warn if producer job is already completed
+    debug:
       msg: "Producer job ran too soon, test may be inaccurate"
     when: job_status.resources[0].status.active is defined and job_status.resources[0].status.active != 1
 
