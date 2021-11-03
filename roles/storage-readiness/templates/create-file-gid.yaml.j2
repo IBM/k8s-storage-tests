@@ -5,7 +5,6 @@ metadata:
   labels:
      job: file-permission
 spec:
-  
   template:
     metadata:
        labels:
@@ -13,7 +12,7 @@ spec:
     spec:
       containers:
       - name: create-file-gid-job
-        image: quay.io/ibm-cp4d-public/storage-util:1.0
+        image: "quay.io/ibm-cp4d-public/storage-util:1.0-{{ arch }}"
         imagePullPolicy: "Always"
         env:
           - name: FILE_NAME_GID
@@ -46,8 +45,6 @@ spec:
         supplementalGroups: [{{ test_supplemental_group }}]
 {% elif test_supplemental_group is defined and accessMode=='ReadWriteOnce' %}
         fsGroup: {{ test_supplemental_group }}
-{% elif accessMode=='ReadWriteOnce' %}
-        fsGroup: {{ test_gid }}
 {% endif %}
         runAsGroup: {{ test_gid }}
 {% if test_supplemental_group is defined and accessMode=='ReadWriteOnce' %}

@@ -30,7 +30,7 @@ spec:
 {% endif %}
       containers:
       - name: consumer-job
-        image: quay.io/centos/amd64
+        image: "quay.io/centos/{{ arch }}"
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME
@@ -55,7 +55,3 @@ spec:
           defaultMode: 0755
           name: consumer-cm 
       restartPolicy: Never
-{% if accessMode=='ReadWriteOnce' %}
-      securityContext:
-         fsGroup: 1000
-{% endif %}

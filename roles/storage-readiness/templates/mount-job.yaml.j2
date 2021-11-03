@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
       - name: mount-job
-        image: quay.io/centos/amd64
+        image: "quay.io/centos/{{ arch }}"
         imagePullPolicy: "IfNotPresent"
         command: ["sh"]
         args:
@@ -23,8 +23,4 @@ spec:
         persistentVolumeClaim:
           claimName: "{{ prefix }}-{{ accessMode|lower }}"
       restartPolicy: Never
-{% if accessMode=='ReadWriteOnce' %}
-      securityContext:
-         fsGroup: 1000
-{% endif %}
 

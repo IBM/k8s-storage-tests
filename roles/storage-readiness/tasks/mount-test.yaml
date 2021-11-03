@@ -4,21 +4,6 @@
 ########################################################################################
 # Mount Test
 ########################################################################################
-
-- name: set up scc and sa for fsgroup test
-  block:
-    - name: create custom scc
-      k8s:
-        state: present
-        definition: "{{ lookup('template', 'fsgroup-scc.yaml.j2') | from_yaml }}"
-    - name: create custom sa
-      shell: oc create sa fsgroup-sa -n {{ storage_validation_namespace }}
-    - name: add scc to custom sa
-      shell: oc adm policy add-scc-to-user fsgroup-scc system:serviceaccount:{{ storage_validation_namespace }}:fsgroup-sa  
-  rescue:
-    - debug:
-        msg: "set up scc and sa for fsgroup test failed"
-  when: accessMode == 'ReadWriteOnce'
   
 - name: Test mount {{ accessMode }} volumes for {{ prefix }}
   k8s:

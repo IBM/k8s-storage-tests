@@ -20,5 +20,7 @@ storageSize: "1Gi"
 options: ""
 backoffLimit: 5
 
+arch: amd64  # amd64, ppc64le
+
 ############################ STORAGE VALIDATION PARAMETERS END ##########################
 

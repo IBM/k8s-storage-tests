@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: file-lock-job
-        image: quay.io/centos/amd64
+        image: "quay.io/centos/{{ arch }}"
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME
