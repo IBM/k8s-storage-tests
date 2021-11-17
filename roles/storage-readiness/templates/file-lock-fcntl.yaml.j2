@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: file-lock-job
-        image: quay.io/ibm-cp4d-public/storage-gcc:1.0
+        image: "quay.io/ibm-cp4d-public/storage-gcc:1.0-{{ arch }}"
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME
