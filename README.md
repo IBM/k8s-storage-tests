@@ -1,4 +1,4 @@
-# Storage Validation Tool for Cloud Paks
+# Storage Validation Tool for IBM Cloud Paks
 
 Kubernetes has gained a lot of momentum with storage vendors providing support on various container orchestration platforms with [CSI](https://kubernetes-csi.github.io/docs/drivers.html) drivers and other mechanisms.
 
