@@ -1,10 +1,10 @@
-# K8s Storage Tests
+# Storage Validation Tool for IBM Cloud Paks
 
 Kubernetes has gained a lot of momentum with storage vendors providing support on various container orchestration platforms with [CSI](https://kubernetes-csi.github.io/docs/drivers.html) drivers and other mechanisms.
 
-It becomes essential for platform administrators to quickly validate a storage platform for their modernized workloads on IBM Cloud Paks and check its readiness level.
+It has become essential for platform administrators to quickly validate a storage platform for their modernized workloads on IBM Cloud Paks and check its readiness level.
 
-This Ansible Playbook helps validate a storage on `ReadWriteOnce` and `ReadWriteMany` volumes. Note that these tests covers readiness and are only meant to be a pre-cursor to a full blown test with actual Cloud Pak workloads.
+This Ansible Playbook helps functionally validate a storage on `ReadWriteOnce` and `ReadWriteMany` volumes. Note that these tests covers readiness and are only meant to be a pre-cursor to a full blown test with actual Cloud Pak workloads.
 
 The following tests are performed:
 
