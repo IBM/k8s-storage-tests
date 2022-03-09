@@ -75,6 +75,16 @@
   vars:
     accessMode: ReadWriteMany
 
+- name: File UID permission tests {{ accessMode }}
+  block:
+  - name: File UID permission tests for {{ accessMode }}
+    include_tasks: file-uid-test.yaml 
+  rescue:
+    - debug:
+        msg: "File UID permission tests for {{ accessMode }} - FAILED"
+  vars:
+    accessMode: ReadWriteMany
+
 - name: SupplementalGroup GID permission tests {{ accessMode }}
   block:
   - name: SupplementalGroup GID permission tests for {{ accessMode }}
