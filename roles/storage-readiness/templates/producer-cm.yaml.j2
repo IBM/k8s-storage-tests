@@ -77,3 +77,27 @@ data:
     /tmp/lock-file ${FILE_NAME}
     ecode=$?
     exit $ecode
+  file-create-uid.sh: |
+    set -ex
+    id
+    touch ${FILE_NAME}
+    ls -la ${FILE_NAME}
+    ls -la ${FILE_NAME} | awk '{ print $3 }'
+    ecode=$?
+    exit $ecode
+  file-create-uid-check-owner.sh: |
+    set -ex
+    uid=${UID}
+    touch ${FILE_NAME}
+    ls -la ${FILE_NAME}
+    file_uid=$(ls -la ${FILE_NAME} | awk '{ print $3 }')
+    if [ "$uid" != "$file_uid" ]
+    then
+      echo "File owner mismatch, expecting $uid, got $file_uid"
+      exit 1
+    else
+      echo "File owner matched"
+    fi
+    ecode=$?
+    exit $ecode
+

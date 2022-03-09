@@ -30,3 +30,12 @@ data:
     ls -la /mnt/data/$FILE_NAME_GID
     echo "\nmodifying with user group $TEST_GID" >> /mnt/data/$FILE_NAME_GID
     tail -1 /mnt/data/$FILE_NAME_GID
+  file-edit-uid.sh: |
+    set -ex
+    id
+    ls -la ${FILE_NAME}
+    sudo chown 1000321000 ${FILE_NAME}
+    #echo "edit test" >> ${FILE_NAME}
+    ls -la ${FILE_NAME}
+    ecode=$?
+    exit $ecode
