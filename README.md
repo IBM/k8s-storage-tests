@@ -13,7 +13,8 @@ The following tests are performed:
  - Sequential [Read Write Consistency](./roles/storage-readiness/README.md#read-write-tests) from single and multiple nodes
  - Parallel Read Write Consistency from single and multiple nodes
  - Parallel Read Write Consistency across multiple threads
- - Accessibility based on POSIX compliant [Group ID Permissions](./roles/storage-readiness/README.md#gid-tests)
+ - File Permissions on mounted volumes
+ - Accessibility based on POSIX compliance [Group ID Permissions](./roles/storage-readiness/README.md#gid-tests)
  - [SubPath](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath) test for volumes
  - [File Locking](https://pubs.opengroup.org/onlinepubs/9699919799/functions/fcntl.html) test
  
@@ -87,6 +88,7 @@ The following tests are performed:
   ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteMany ##############
   ######################## PARALLEL READ WRTIE TEST PASSED FOR ReadWriteOnce ############################
   ######################## MULTI NODE PARALLEL READ WRTIE TEST PASSED FOR ReadWriteMany #################
+  ######################## FILE UID TEST PASSED FOR ReadWriteMany Volume ################################
   ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteMany Volume ########################
   ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteOnce Volume ########################
   ######################## SUB PATH TEST PASSED FOR ReadWriteMany Volume ################################
@@ -102,5 +104,12 @@ resources in the namespace
 oc delete job $(oc get jobs -n <storage_validation_namespace> | awk '{ print $1 }') -n <storage_validation_namespace>
 oc delete cm $(oc get cm -n <storage_validation_namespace> | awk '{ print $1 }') -n <storage_validation_namespace>
 oc delete pvc $(oc get pvc -n <storage_validation_namespace> | awk '{ print $1 }') -n <storage_validation_namespace>
+oc delete scc zz-fsgroup-scc
+```
+
+OR
+
+```
+oc delete project <storage_validation_namespace>
 oc delete scc zz-fsgroup-scc
 ```
