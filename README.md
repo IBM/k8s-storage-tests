@@ -95,6 +95,11 @@ The following tests are performed:
   ######################### FILE LOCK TESTS PASSED FOR ReadWriteMany Volume #############################
  ```
 
+ ```
+  PLAY RECAP *********************************************************************
+  localhost                  : ok=109  changed=42   unreachable=0    failed=0    skipped=7    rescued=0    ignored=0   
+ ```
+
 ## Clean-up Resources
 
 Delete the kuberbetes namespace that you created in [Setup](#setup), you can also run these commands to clean up the 
