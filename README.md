@@ -100,6 +100,53 @@ The following tests are performed:
   localhost                  : ok=109  changed=42   unreachable=0    failed=0    skipped=7    rescued=0    ignored=0   
  ```
 
+### Running the Playbook with the Container
+
+#### Environment Setup
+
+```sh
+export dockerexe=podman # or docker
+export container_name=k8s-storage-test
+# export docker_image="TODO: we need a location for this"
+
+alias k8s_storage_test_exec="${dockerexe} exec ${container_name}"
+alias run_k8s_storage_test="k8s_storage_test_exec ansible-playbook main.yml --extra-vars \"@/tmp/work-dir/params.yml\" | tee output.log"
+alias run_k8s_storage_test_cleanup="k8s_storage_test_exec cleanup.sh -n ${NAMESPACE} -d"
+```
+
+#### Start the Container
+
+```sh
+mkdir -p /tmp/k8s_storage_test/work-dir
+cp ./params.yml /tmp/k8s_storage_test/work-dir/params.yml
+
+${dockerexe} run --name ${container_name} -d -v /tmp/k8s_storage_test/work-dir:/tmp/work-dir ${docker_image}
+```
+
+#### Run the Playbook
+
+```sh
+run_k8s_storage_test
+```
+
+#### Optional Cleanup the Cluster
+
+```sh
+run_k8s_storage_test_cleanup
+
+[INFO ] running clean up for namespace storage-validation-1 and the namespace will be deleted
+[INFO ] please run the following command in a terminal that has access to the cluster to clean up after the ansible playbooks
+
+oc get job -n storage-validation-1 -o name | xargs -I % -n 1 oc delete % -n storage-validation-1 && \
+oc get pvc -n storage-validation-1 -o name | xargs -I % -n 1 oc delete % -n storage-validation-1 && \
+oc get cm -n storage-validation-1 -o name | xargs -I % -n 1 oc delete % -n storage-validation-1 && \
+oc delete ns storage-validation-1 --ignore-not-found && \
+oc delete scc zz-fsgroup-scc --ignore-not-found
+
+[INFO ] cleanup script finished with no errors
+```
+
+
 ## Clean-up Resources
 
 Delete the kuberbetes namespace that you created in [Setup](#setup), you can also run these commands to clean up the 
