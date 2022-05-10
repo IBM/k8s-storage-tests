@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: read-file-job
-        image: "quay.io/centos/{{ arch }}"
+        image: "{{ docker_registry }}/centos/{{ arch }}"
         imagePullPolicy: "Always"
         env:
           - name: FILE_NAME_GID
