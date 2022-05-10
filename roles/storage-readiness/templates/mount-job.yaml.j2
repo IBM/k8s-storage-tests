@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
       - name: mount-job
-        image: "quay.io/centos/{{ arch }}"
+        image: "{{ docker_registry }}/centos/{{ arch }}"
         imagePullPolicy: "IfNotPresent"
         command: ["sh"]
         args:

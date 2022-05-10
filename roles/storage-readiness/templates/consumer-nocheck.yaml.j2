@@ -30,7 +30,7 @@ spec:
 {% endif %}
       containers:
       - name: consumer-job
-        image: "quay.io/centos/{{ arch }}"
+        image: "{{ docker_registry }}/centos/{{ arch }}"
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME

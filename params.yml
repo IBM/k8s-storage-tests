@@ -22,5 +22,7 @@ backoffLimit: 5
 
 arch: amd64  # amd64, ppc64le
 
+docker_registry: "quay.io"
+
 ############################ STORAGE VALIDATION PARAMETERS END ##########################
 
