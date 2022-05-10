@@ -31,11 +31,8 @@ RUN python3 -m pip install --upgrade pip;  pip3 uninstall -y ansible \
     && ln -s /usr/bin/python3 /usr/local/bin/python \
     && pip3 install "oauthlib>=3.2.0" \
     && ansible-galaxy collection install operator_sdk.util \
-    && ansible-galaxy collection install community.kubernetes  \
-    && curl -sSL https://mirror.openshift.com/pub/openshift-v4/clients/oc/4.6/linux/oc.tar.gz >${HOME}/oc.tar.gz \
-    && tar -xvf ${HOME}/oc.tar.gz \
-    && chmod +x oc \
-    && cp oc /usr/local/bin
+    && ansible-galaxy collection install community.kubernetes \
+    && curl -sL https://github.com/openshift/okd/releases/download/4.7.0-0.okd-2021-08-22-163618/openshift-client-linux-4.7.0-0.okd-2021-08-22-163618.tar.gz | tar xvz --directory /usr/local/bin/. 
 
 
 RUN chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
