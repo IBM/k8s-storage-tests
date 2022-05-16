@@ -23,19 +23,13 @@ COPY roles/* ${HOME}/roles/
 
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
-RUN python3 -m pip install --upgrade pip;  pip3 uninstall -y ansible \
-    && rm -rf /usr/local/lib/python3.8/site-packages/ansible* \
-    && rm -f /usr/local/bin/ansible* \
-    && pip3 install ansible-base~=2.10  \
-    && pip3 install openshift && pip3 install Jinja2 && pip3 install yasha && pip3 install argparse \
+RUN pip3 install openshift && pip3 install Jinja2 && pip3 install yasha && pip3 install argparse \
     && ln -s /usr/bin/python3 /usr/local/bin/python \
     && pip3 install "oauthlib>=3.2.0" \
     && ansible-galaxy collection install operator_sdk.util \
     && ansible-galaxy collection install community.kubernetes \
-    && curl -sL https://github.com/openshift/okd/releases/download/4.7.0-0.okd-2021-08-22-163618/openshift-client-linux-4.7.0-0.okd-2021-08-22-163618.tar.gz | tar xvz --directory /usr/local/bin/. 
-
-
-RUN chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
+    && curl -sL https://github.com/openshift/okd/releases/download/4.8.0-0.okd-2021-11-14-052418/openshift-client-linux-4.8.0-0.okd-2021-11-14-052418.tar.gz | tar xvz --directory /usr/local/bin/. \
+    && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
 USER ${USER_UID}
 
