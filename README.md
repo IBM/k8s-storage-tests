@@ -107,7 +107,7 @@ The following tests are performed:
 ```sh
 export dockerexe=podman # or docker
 export container_name=k8s-storage-test
-# export docker_image="TODO: we need a location for this"
+export docker_image=icr.io/cpopen/cpd/k8s-storage-test:v1.0.0
 
 alias k8s_storage_test_exec="${dockerexe} exec ${container_name}"
 alias run_k8s_storage_test="k8s_storage_test_exec ansible-playbook main.yml --extra-vars \"@/tmp/work-dir/params.yml\" | tee output.log"

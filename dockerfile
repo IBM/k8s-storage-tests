@@ -5,7 +5,7 @@ LABEL name="k8s-storage-test" \
       maintainer="Nathan Brophy <nathan.brophy@ibm.com>" \
       vendor="IBM" \
       version="v1.0.0" \
-      release="<Release Information>" \
+      release="Version 1.0.0 containerized packaging for the K8s sotrage test ansible playbooks" \
       summary="This is a containerized version of the k8s-storage-tests ansible playbooks" \
       description="This image contains the ansible playbooks for running the storage test execution suite"
 
