@@ -17,7 +17,7 @@ The following tests are performed:
  - Accessibility based on POSIX compliance [Group ID Permissions](./roles/storage-readiness/README.md#gid-tests)
  - [SubPath](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath) test for volumes
  - [File Locking](https://pubs.opengroup.org/onlinepubs/9699919799/functions/fcntl.html) test
- 
+
 ### Prerequisites
 
 - Ensure you have python 3.6 or later and [pip](https://pip.pypa.io/en/stable/installation/) 21.1.3 or later installed
@@ -27,46 +27,46 @@ The following tests are performed:
   `pip --version`
 
 - Install Ansible 2.10.5 or later
-  
+
   `pip install ansible==2.10.5`
 
 - Install ansible k8s modules
 
   `pip install openshift`
-   
+
   `ansible-galaxy collection install operator_sdk.util`
-  
+
   `ansible-galaxy collection install community.kubernetes`
-  
-- Install [OpenShift Client 4.6 or later](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.6.31) based on your OS. 
-  
+
+- Install [OpenShift Client 4.6 or later](https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/4.6.31) based on your OS.
+
 - Access to the OpenShift Cluster (at least 3 compute nodes) setup with RWX and RWO storage classes with cluster admin access.
 
 ### Setup
 
  - Clone this git repo to your client
-  
+
  - Update the `params.yml` file with your OCP URL and Credentials
- 
+
    ```
     ocp_url: https://<required>:6443
     ocp_username: <required>
     ocp_password: <required>
     ocp_token: <required if user/password not available>
    ```
-  
+
  - Update the `params.yml` file for the `required` storage parameters
- 
+
     ```
-    storageClass_ReadWriteOnce: <required> 
-    storageClass_ReadWriteMany: <required> 
+    storageClass_ReadWriteOnce: <required>
+    storageClass_ReadWriteMany: <required>
     storage_validation_namespace: <required>
     ```
-  
+
 ### Running the Playbook
 
  - From the root of this repository, run:
-  
+
   ```bash
     ansible-playbook main.yml --extra-vars "@./params.yml" | tee output.log
   ```
@@ -77,28 +77,6 @@ The following tests are performed:
   export K8S_AUTH_VERIFY_SSL=no
   ```
 
- - On a successful run, you should see the following output
-
- ```
-  ######################## MOUNT TESTS PASSED FOR ReadWriteOnce Volume  #################################
-  ######################## MOUNT TESTS PASSED FOR ReadWriteMany Volume  #################################
-  ######################## SEQUENTIAL READ WRITE TEST PASSED FOR ReadWriteOnce Volume ###################
-  ######################## SEQUENTIAL READ WRITE TEST PASSED FOR ReadWriteMany Volume ###################
-  ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteOnce ##############
-  ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteMany ##############
-  ######################## PARALLEL READ WRTIE TEST PASSED FOR ReadWriteOnce ############################
-  ######################## MULTI NODE PARALLEL READ WRTIE TEST PASSED FOR ReadWriteMany #################
-  ######################## FILE UID TEST PASSED FOR ReadWriteMany Volume ################################
-  ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteMany Volume ########################
-  ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteOnce Volume ########################
-  ######################## SUB PATH TEST PASSED FOR ReadWriteMany Volume ################################
-  ######################### FILE LOCK TESTS PASSED FOR ReadWriteMany Volume #############################
- ```
-
- ```
-  PLAY RECAP *********************************************************************
-  localhost                  : ok=109  changed=42   unreachable=0    failed=0    skipped=7    rescued=0    ignored=0   
- ```
 
 ### Running the Playbook with the Container
 
@@ -147,10 +125,35 @@ oc delete scc zz-fsgroup-scc --ignore-not-found
 [INFO ] cleanup script finished with no errors
 ```
 
+### Verifying your results
+
+Regardless of whether you run the Playbook or use the Container,
+on a successful run, you should see the following output:
+
+```
+ ######################## MOUNT TESTS PASSED FOR ReadWriteOnce Volume  #################################
+ ######################## MOUNT TESTS PASSED FOR ReadWriteMany Volume  #################################
+ ######################## SEQUENTIAL READ WRITE TEST PASSED FOR ReadWriteOnce Volume ###################
+ ######################## SEQUENTIAL READ WRITE TEST PASSED FOR ReadWriteMany Volume ###################
+ ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteOnce ##############
+ ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteMany ##############
+ ######################## PARALLEL READ WRTIE TEST PASSED FOR ReadWriteOnce ############################
+ ######################## MULTI NODE PARALLEL READ WRTIE TEST PASSED FOR ReadWriteMany #################
+ ######################## FILE UID TEST PASSED FOR ReadWriteMany Volume ################################
+ ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteMany Volume ########################
+ ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteOnce Volume ########################
+ ######################## SUB PATH TEST PASSED FOR ReadWriteMany Volume ################################
+ ######################### FILE LOCK TESTS PASSED FOR ReadWriteMany Volume #############################
+```
+
+```
+ PLAY RECAP *********************************************************************
+ localhost                  : ok=109  changed=42   unreachable=0    failed=0    skipped=7    rescued=0    ignored=0   
+```
 
 ## Clean-up Resources
 
-Delete the kuberbetes namespace that you created in [Setup](#setup), you can also run these commands to clean up the 
+Delete the kuberbetes namespace that you created in [Setup](#setup), you can also run these commands to clean up the
 resources in the namespace
 
 ```
