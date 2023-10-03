@@ -6,7 +6,7 @@ It has become essential for platform administrators to quickly validate a storag
 
 This Ansible Playbook helps functionally validate a storage on `ReadWriteOnce` and `ReadWriteMany` volumes. Note that these tests covers readiness and are only meant to be a pre-cursor to a full blown test with actual Cloud Pak workloads.
 
->**Note that: if the tests in this storage readiness project are successful, it's highly recommended that you continue to perform further performance tests on the storage by following this companion project at https://github.com/IBM/k8s-storage-perf, and perform the tests provided there. It will give you a good assessment of the particular storage performance.**
+>**Note that: if the tests in this storage readiness project are successful, it's strongly recommended that you continue to perform further performance tests on the storage by following this companion project at https://github.com/IBM/k8s-storage-perf, and perform the tests provided there. It will give you a good assessment of the particular storage performance.**
 
 The following tests are performed:
 
