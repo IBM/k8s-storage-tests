@@ -39,7 +39,7 @@ The following tests are performed:
   ```
 
   >NB: if `pip` is not available or is an older version, run the command below to upgrade it, and then check its version again. If `pip` command
-  can't be found after the below command, add `/usr/local/bin/pip` into your PATH ENV variable.
+  can't be found after the below command, add `/usr/local/bin` into your PATH ENV variable.
   
   `python -m pip install --upgrade pip`
   
