@@ -70,7 +70,11 @@ The following tests are performed:
 
 ### Setup
 
- - Clone this git repo to your client
+  - Clone this git repo to your client
+
+   ```
+     git clone https://github.com/IBM/k8s-storage-tests.git
+   ```
 
  - Update the `params.yml` file with your OCP URL and Credentials
 
