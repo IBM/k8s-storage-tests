@@ -2,7 +2,7 @@
 ########################################################################################
 
 - name: Test mount {{ accessMode }} volumes for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -13,7 +13,7 @@
 # File Lock Tests using FLOCK and FCNTL
 ########################################################################################
 - name: Set config maps
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -21,7 +21,7 @@
      - name: producer-cm.yaml.j2
 
 - name: File lock test for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -35,7 +35,7 @@
     seconds: 20
 
 - name: Negative file lock test for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -50,7 +50,7 @@
     type: create-lock2
 
 - name: Wait for lock to be released
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -65,7 +65,7 @@
     type: create-lock
 
 - name: Positive lock test for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -80,7 +80,7 @@
     type: create-lock3
 
 - name: Fcntl test for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -94,7 +94,7 @@
     seconds: 20
 
 - name: Negative Fcntl test for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -109,7 +109,7 @@
     type: create-lock2
 
 - name: Wait for Fcntl lock to be released
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -124,7 +124,7 @@
     type: create-lock
 
 - name: Positive Fcntl test for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"

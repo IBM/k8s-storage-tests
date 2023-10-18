@@ -2,7 +2,7 @@
 ########################################################################################
 
 - name: Test mount {{ accessMode }} volumes for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -10,7 +10,7 @@
      - name: create-volume.yaml.j2
 
 - name: Set config maps
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -26,7 +26,7 @@
 ########################################################################################
 
 - name: Get node count
-  k8s_info:
+  kubernetes.core.k8s_info:
     kind: Nodes
     label_selectors:
       - node-role.kubernetes.io/worker = 
@@ -36,7 +36,7 @@
      node_count: "{{ node_list|length }}"
 
 - name: Parallel write from same/separate nodes
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -53,7 +53,7 @@
 
 
 - name: Parallel write no wait from same/separate nodes
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -64,7 +64,7 @@
     threads: "{{ node_count }}"
 
 - name: Parallel read no wait from same/separate nodes
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -75,7 +75,7 @@
     threads: "{{ node_count }}"
 
 - name: Wait Until parallel producer job is done
-  k8s_info:
+  kubernetes.core.k8s_info:
     name: "{{ prefix }}-producer-job-{{ accessMode|lower}}-{{ type }}"
     namespace: "{{ storage_validation_namespace }}"
     kind: Job
@@ -87,7 +87,7 @@
     type: parallel-multi-no-wait
 
 - name: Wait Until parallel consumer job is done
-  k8s_info:
+  kubernetes.core.k8s_info:
     name: "{{ prefix }}-consumer-job-{{ accessMode|lower}}-{{ type }}"
     namespace: "{{ storage_validation_namespace }}"
     kind: Job

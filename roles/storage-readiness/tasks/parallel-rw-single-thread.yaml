@@ -5,7 +5,7 @@
 # Mount Test
 ########################################################################################
 - name: Test mount {{ accessMode }} volumes for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -19,7 +19,7 @@
 - block:
 
   - name: Set config maps
-    k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: "{{ storage_validation_namespace }}"
       definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -30,7 +30,7 @@
       options: "oflag=dsync conv=notrunc"
 
   - name: Parallel read/write  {{ accessMode }} volumes for {{ prefix }}
-    k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: "{{ storage_validation_namespace }}"
       definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -40,7 +40,7 @@
       type: parallel
 
   - name: Parallel concurrency read while producer is running 
-    k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: "{{ storage_validation_namespace }}"
       definition: "{{ lookup('template', item.name) | from_yaml }}"
@@ -56,7 +56,7 @@
       backoffLimit: 6
 
   - name: Assert that producer is still running
-    k8s_info:
+    kubernetes.core.k8s_info:
       kind: Job
       name: "{{ prefix }}-producer-job-{{ accessMode|lower}}-{{ type }}"
       namespace: "{{ storage_validation_namespace }}"
@@ -70,7 +70,7 @@
     when: job_status.resources[0].status.active is defined and job_status.resources[0].status.active != 1
 
   - name: Wait until producer job is done
-    k8s_info:
+    kubernetes.core.k8s_info:
       name: "{{ prefix }}-producer-job-{{ accessMode|lower}}-{{ type }}"
       namespace: "{{ storage_validation_namespace }}"
       kind: Job
@@ -82,7 +82,7 @@
       type: parallel
 
 - name: Parallel read  {{ accessMode }} volumes for {{ prefix }}
-  k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "{{ storage_validation_namespace }}"
     definition: "{{ lookup('template', item.name) | from_yaml }}"
