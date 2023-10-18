@@ -53,7 +53,7 @@ The following tests are performed:
 
   `ansible-galaxy collection install operator_sdk.util`
 
-  `ansible-galaxy collection install community.kubernetes`
+  `ansible-galaxy collection install kubernetes.core`
 
    >NB: the `openshift` package installation requires PyYAML >= 5.4.1, and if the existing PyYAML is an older version, then PyYAML's 
    installation will fail. To overcome this issue, manually delete the exsiting PyYAML package as below (adjust the paths in the commands 
@@ -163,7 +163,7 @@ on a successful run, you should see the following output:
  ######################## SEQUENTIAL READ WRITE TEST PASSED FOR ReadWriteMany Volume ###################
  ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteOnce ##############
  ######################## SINGLE THREAD PARALLEL READ WRITE TEST PASSED for ReadWriteMany ##############
- ######################## PARALLEL READ WRTIE TEST PASSED FOR ReadWriteOnce ############################
+ ######################## MULTI NODE PARALLEL READ WRTIE TEST PASSED FOR ReadWriteOnce #################
  ######################## MULTI NODE PARALLEL READ WRTIE TEST PASSED FOR ReadWriteMany #################
  ######################## FILE UID TEST PASSED FOR ReadWriteMany Volume ################################
  ######################## FILE PERMISSIONS TEST PASSED FOR ReadWriteMany Volume ########################

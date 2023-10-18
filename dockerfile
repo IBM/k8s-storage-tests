@@ -27,7 +27,7 @@ RUN pip3 install openshift && pip3 install Jinja2 && pip3 install yasha && pip3 
     && ln -s /usr/bin/python3 /usr/local/bin/python \
     && pip3 install "oauthlib>=3.2.0" \
     && ansible-galaxy collection install operator_sdk.util \
-    && ansible-galaxy collection install community.kubernetes \
+    && ansible-galaxy collection install kubernetes.core \
     && curl -sL https://github.com/openshift/okd/releases/download/4.8.0-0.okd-2021-11-14-052418/openshift-client-linux-4.8.0-0.okd-2021-11-14-052418.tar.gz | tar xvz --directory /usr/local/bin/. \
     && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
