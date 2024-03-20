@@ -10,4 +10,6 @@ arch_type=${ARC_TYPE:-`uname -m`}
 
 dockerexe=${DOCKER_EXE:-podman}
 nocache=${DEV_NOCACHE:-"--pull"}
-${dockerexe} build ${nocache} -f ${docker_file_name} -t ${docker_image}:${docker_tag}-${arch_type} .
+${dockerexe} build ${nocache} -f ${docker_file_name} \
+             -t ${docker_image}:${docker_tag}-${arch_type} \
+             --build-arg "architecture=${arch_type}" .
