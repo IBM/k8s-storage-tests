@@ -457,11 +457,11 @@ pipeline {
    post {
       success{
          echo "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})"
-         slackSend (color: '#00FF00', channel: "${SLACK_CHANNEL}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.TAG_ID_WITH_TIME_STAMP}]' (${env.BUILD_URL}), MORE INFO: ${GHE_HTTP_URL}/blob/build_info/IMAGES.md")
+         slackSend (color: '#00FF00', channel: "${SLACK_CHANNEL}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.TAG_ID}]' (${env.BUILD_URL})")
       }
       failure{
          echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})"
-         slackSend (color: '#FF0000', channel: "${SLACK_CHANNEL}", message: "FAILED: Job '${env.JOB_NAME} [${env.TAG_ID_WITH_TIME_STAMP}]' (${env.BUILD_URL})")
+         slackSend (color: '#FF0000', channel: "${SLACK_CHANNEL}", message: "FAILED: Job '${env.JOB_NAME} [${env.TAG_ID}]' (${env.BUILD_URL})")
       }
    }
 }
