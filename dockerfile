@@ -11,9 +11,12 @@ LABEL name="k8s-storage-test" \
 
 USER 0
 
+ARG architecture
+
 ENV USER_UID=1001
 ENV ANSIBLE_PYTHON_INTERPRETER /usr/local/bin/python
 ENV PATH ${PATH}:${HOME}/bin
+ENV ARCHITECTURE=${architecture}
 
 RUN mkdir /licenses
 COPY LICENSE /licenses
@@ -30,7 +33,7 @@ RUN pip3 install openshift && pip3 install Jinja2 && pip3 install yasha && pip3 
     && pip3 install "oauthlib>=3.2.0" \
     && ansible-galaxy collection install operator_sdk.util \
     && ansible-galaxy collection install kubernetes.core \
-    && curl -sL https://github.com/openshift/okd/releases/download/4.8.0-0.okd-2021-11-14-052418/openshift-client-linux-4.8.0-0.okd-2021-11-14-052418.tar.gz | tar xvz --directory /usr/local/bin/. \
+    && curl -sL http://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz | tar xvz --directory /usr/local/bin/. \
     && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
 USER ${USER_UID}
