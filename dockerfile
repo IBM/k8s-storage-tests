@@ -1,5 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
-FROM quay.io/operator-framework/ansible-operator:v1.17.0
+FROM quay.io/operator-framework/ansible-operator:v1.34.1
 
 LABEL name="k8s-storage-test" \
       maintainer="Nathan Brophy <nathan.brophy@ibm.com>" \
