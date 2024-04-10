@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v1.34.1
+FROM cp.stg.icr.io/cp/cpd/ansible-operator-base:2.0.0-latest
 
 LABEL name="k8s-storage-test" \
       maintainer="IBM" \
@@ -17,7 +17,7 @@ ENV ANSIBLE_PYTHON_INTERPRETER /usr/local/bin/python
 ENV PATH ${PATH}:${HOME}/bin
 ENV ARCHITECTURE=${architecture}
 
-RUN mkdir /licenses
+RUN mkdir -p /licenses
 COPY LICENSE /licenses
 
 COPY bin ${HOME}/bin
@@ -25,6 +25,9 @@ COPY roles ${HOME}/roles
 COPY *.yml LICENSE *.py *.sh ${HOME}
 COPY cleanup.sh /usr/local/bin/cleanup.sh
 
+RUN microdnf -y install python3-pip \
+    && python3 -m ensurepip \
+    && pip3 --no-cache-dir install --upgrade pip setuptools
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
 RUN pip3 install openshift && pip3 install Jinja2 && pip3 install yasha && pip3 install argparse \
