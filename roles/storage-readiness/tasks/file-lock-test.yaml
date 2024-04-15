@@ -45,7 +45,7 @@
       type: Failed
       status: "True"
   loop:
-     - name: file-lock.yaml.j2
+     - name: file-lock2.yaml.j2
   vars:
     type: create-lock2
 
