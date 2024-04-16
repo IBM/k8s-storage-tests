@@ -38,6 +38,9 @@ RUN pip3 install openshift && pip3 install Jinja2 && pip3 install yasha && pip3 
     && curl -sL http://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz | tar xvz --directory /usr/local/bin/. \
     && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
+# clean cache to save image space
+RUN microdnf clean all && rm -rf /var/cache/* /var/log/dnf* /var/log/yum.* /usr/share/zoneinfo
+
 USER ${USER_UID}
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
