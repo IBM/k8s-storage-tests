@@ -55,10 +55,12 @@ pipeline {
 
                             withEnv(['ARC_TYPE=x86_64']){
 
-                               withCredentials([usernamePassword(credentialsId: 'Docker-James', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                                  dir ("${IMAGE_NAME}"){                  
-                                     sh '''                        
-                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io  
+                               withCredentials([usernamePassword(credentialsId: 'Docker-James', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS'),
+                                                string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY')]) {
+                                  dir ("${IMAGE_NAME}"){
+                                     sh '''
+                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
                                  
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
@@ -176,10 +178,12 @@ pipeline {
 
                             withEnv(['ARC_TYPE=ppc64le']){
 
-                               withCredentials([usernamePassword(credentialsId: 'Docker-James', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {                               
-                                  dir ("${IMAGE_NAME}"){                  
-                                     sh '''                        
-                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io  
+                               withCredentials([usernamePassword(credentialsId: 'Docker-James', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS'),
+                                                string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY')]) {
+                                  dir ("${IMAGE_NAME}"){
+                                     sh '''
+                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
                                      
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
@@ -295,10 +299,12 @@ pipeline {
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=s390x']){
-                               withCredentials([usernamePassword(credentialsId: 'Docker-James', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {                               
-                                  dir ("${IMAGE_NAME}"){                  
-                                     sh '''                        
-                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io  
+                               withCredentials([usernamePassword(credentialsId: 'Docker-James', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS'),
+                                                string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY')]) {                               
+                                  dir ("${IMAGE_NAME}"){
+                                     sh '''
+                                        ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
                                      
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
