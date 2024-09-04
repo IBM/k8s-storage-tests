@@ -54,7 +54,6 @@ RUN chown ${EXTRA_UID}:${EXTRA_GID} /home/cpuser/gidtest.txt && \
 ###
 
 RUN microdnf -y install python3-pip util-linux-core \
-    && python3 -m ensurepip \
     && pip3 --no-cache-dir install --upgrade pip setuptools
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint
 
