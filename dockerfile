@@ -1,3 +1,11 @@
+FROM registry.access.redhat.com/ubi9-minimal:latest as gcc-build
+
+RUN microdnf install gcc --nodocs --noplugins --setopt=install_weak_deps=0 -y && \
+    mkdir -p /tmp/lfcopy
+COPY lock-file.c /tmp/lfcopy
+RUN gcc -o /tmp/lfcopy/lock-file /tmp/lfcopy/lock-file.c
+
+
 FROM cp.stg.icr.io/cp/cpd/ansible-operator-base:2.0.0-latest
 
 LABEL name="k8s-storage-test" \
@@ -24,8 +32,28 @@ COPY bin ${HOME}/bin
 COPY roles ${HOME}/roles
 COPY *.yml LICENSE *.py *.sh ${HOME}
 COPY cleanup.sh /usr/local/bin/cleanup.sh
+COPY --from=gcc-build /tmp/lfcopy/lock-file /usr/local/bin/lock-file
 
-RUN microdnf -y install python3-pip \
+###
+ENV EXTRA_UID=1000321000
+ENV EXTRA_GID=1000321000
+
+# NOTE: build/run fails on Mac with rootless podman
+RUN groupadd -g ${EXTRA_GID} cpuser && \
+    useradd -l -u ${EXTRA_UID} -g ${EXTRA_GID} -d /home/cpuser -s /bin/sh cpuser &&\
+    echo "User added."
+
+RUN chgrp ${EXTRA_GID} -R /home/cpuser && \
+  chmod g+rwx,o+r /home/cpuser
+
+RUN umask 007 && echo "file permissions test create file " >> /home/cpuser/gidtest.txt && \
+    echo "file permissions test create file " >> /home/cpuser/sgtest.txt
+
+RUN chown ${EXTRA_UID}:${EXTRA_GID} /home/cpuser/gidtest.txt && \
+    chown 3000:3000 /home/cpuser/sgtest.txt
+###
+
+RUN microdnf -y install python3-pip util-linux-core \
     && python3 -m ensurepip \
     && pip3 --no-cache-dir install --upgrade pip setuptools
 RUN ln -fs ${HOME}/bin/entrypoint /usr/local/bin/entrypoint

@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: edit-file-job
-        image: "{{ docker_registry }}/centos/{{ arch }}"
+        image: {{ imageurl }}
         imagePullPolicy: "Always"
         env:
           - name: FILE_NAME_GID
