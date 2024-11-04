@@ -458,7 +458,13 @@ pipeline {
                                ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.s390x
                             ${DOCKER_EXE} manifest inspect ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
                             ${DOCKER_EXE} manifest push --format=v2s2 ${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER} docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
-         
+
+                            skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER} \
+                                        docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID} \
+                                        --src-creds iamapikey:${ICR_KEY} \
+                                        --dest-creds iamapikey:${ICR_KEY} \
+                                        --all
+                                        
                             # VIEW IMAGE DETAILS
                             ${DOCKER_EXE} images --digests
                             ${DOCKER_EXE} ps -a
