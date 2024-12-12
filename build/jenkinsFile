@@ -14,6 +14,12 @@ pipeline {
       QUAY_REGISTRY="quay.io/jammurp"      
       PROD_REGISTRY="icr.io/cpopen/cpd"
       
+      /////Mend OSS Scan variables/////
+      WS_PRODUCTNAME = 'PSIRT_PRD0004031'
+      WS_PROJECTNAME = "${IMAGE_NAME}_${CP4D_VERSION}"
+      WS_JAR_URL = 'https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar'
+      WS_WSS_URL = 'https://ibmets.whitesourcesoftware.com/agent'
+            
       //VERSION TAGS TO BE USED BY THE BUILD - PASSED IN FROM JENKINS
       CPD_VER="${CP4D_VERSION}"
       
@@ -506,6 +512,23 @@ pipeline {
                    }
                 }
              }
+         }
+      }
+      stage('Run Vulnerability Scans') {
+         when {
+            expression { return params.SCAN == true }
+         }
+         steps {
+            script {
+               withCredentials([ string(credentialsId: 'mend_userkey', variable: 'WS_USERKEY'),
+                                 string(credentialsId: "ws_apikey", variable: 'WS_APIKEY'),
+                                 string(credentialsId: "sonar_storage-tests", variable: 'SONAR_KEY') ]){
+                  dir ("${IMAGE_NAME}"){
+                     sh './build/mend.sh'
+                     sh './build/sonar.sh'
+                  }
+               }
+            }
          }
       }
    }
