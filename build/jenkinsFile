@@ -549,7 +549,7 @@ pipeline {
                      
                         sh '''
                            cd ./stable/case/ibm-cp4d-cpd-cli/inventory/health
-                           OLD_TAG=`cat resources.yaml |grep -m 1 IMAGE_DIGEST+${IMAGE_NAME} | cut -d '+' -f 3`
+                           OLD_TAG=`cat resources.yaml |grep -m 1 FAT_MANIFEST_DIGEST+${IMAGE_NAME} | cut -d '+' -f 3`
                            sed -i "s|${OLD_TAG}|${TAG_ID}|" resources.yaml
                         
                            git add .
