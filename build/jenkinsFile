@@ -514,18 +514,58 @@ pipeline {
              }
          }
       }
-      stage('Run Vulnerability Scans') {
+      stage('RUN POST BUILD STEPS'){
          when {
-            expression { return params.SCAN == true }
+            expression { return params.BVT == true }
          }
-         steps {
-            script {
-               withCredentials([ string(credentialsId: 'mend_userkey', variable: 'WS_USERKEY'),
+         parallel {
+            stage('Run Vulnerability Scans') {
+               when {
+                  expression { return params.SCAN == true }
+               }
+               steps {
+                  script {
+                     withCredentials([ string(credentialsId: 'mend_userkey', variable: 'WS_USERKEY'),
                                  string(credentialsId: "ws_apikey", variable: 'WS_APIKEY'),
                                  string(credentialsId: "sonar_storage-tests", variable: 'SONAR_KEY') ]){
-                  dir ("${IMAGE_NAME}"){
-                     sh './build/mend.sh'
-                     sh './build/sonar.sh'
+                        dir ("${IMAGE_NAME}"){
+                           sh './build/mend.sh'
+                           sh './build/sonar.sh'
+                        }
+                     }
+                  }
+               }
+            }
+            stage("UPDATE CPD-CLI BUNDLE") {
+               steps {
+                  script{
+                     // Get the node name so we can make sure all steps run on same node
+                     echo "NODE_NAME = ${env.NODE_NAME}"
+                  
+                     dir ('cpd-cli-bundle'){
+                        deleteDir()
+                        git  branch: "${CPD_VER}", credentialsId: "${GIT_CREDENTIALS_ID}", url: "${BUNDLE_GHE_URL}" , poll: false
+                     
+                        sh '''
+                           cd ./stable/case/ibm-cp4d-cpd-cli/inventory/health
+                           OLD_TAG=`cat resources.yaml |grep -m 1 IMAGE_DIGEST+${IMAGE_NAME} | cut -d '+' -f 3`
+                           sed -i "s|${OLD_TAG}|${TAG_ID}|" resources.yaml
+                        
+                           git add .
+                           
+                           # EXIT IF THERE ARE NO CHANGES TO MERGE
+                           # OTHERWISE MERGE AND UPDATE BRANCH
+                           clean_string="nothing to commit"
+                           status=`git status | grep "${clean_string}" | cut -d ',' -f 1`
+                           if [ "${status}" == "${clean_string}" ] 
+                           then
+                              echo ${clean_string}
+                           else
+                              git commit -m "${IMAGE_NAME} BUILD ${TAG_ID}"
+                              git push origin ${CPD_VER}
+                           fi
+                        '''
+                     }
                   }
                }
             }
