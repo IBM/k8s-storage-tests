@@ -5,7 +5,8 @@ pipeline {
    environment{
       GHE_URL="git@github.ibm.com:${JOB_ORGANIZATION}/${GHE_REPO}.git"
       GHE_HTTP_URL="https://github.ibm.com/${JOB_ORGANIZATION}/${GHE_REPO}"
-      
+      BUNDLE_GHE_URL="git@github.ibm.com:PrivateCloud-analytics/ibm-cp4d-cpd-cli-bundle.git"
+
       //DOCKER REPOS
       DOCKER_REGISTRY="docker-na.artifactory.swg-devops.com/hyc-cp4d-team-bootstrap-2-docker-local"
       DOCKER_REPO="ibm_cpd_zen"
