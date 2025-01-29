@@ -505,7 +505,14 @@ pipeline {
                                         
                          # VERIFY FAT MANIFEST
                          ${DOCKER_EXE} login ${PROD_REGISTRY} -u iamapikey -p ${CPOPEN_KEY}
-                         ${DOCKER_EXE} manifest inspect ${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER}                                        
+                         ${DOCKER_EXE} manifest inspect ${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
+                         
+                         git status
+                         git branch
+                         tag_name="${IMAGE_NAME}-${TAG_ID}"
+                         tag_message="${IMAGE_NAME} BUILD: ${TAG_ID}"
+                         git tag -a ${tag_name} -m "${tag_message}" -f
+                         git push origin ${tag_name} -f
                       '''
                    }
                    else {
