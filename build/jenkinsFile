@@ -486,40 +486,42 @@ pipeline {
       }
       stage("PROMOTE TO ICR PROD"){
          when {
-             expression { return params.BVT == true }
-             expression { return params.PROD == true }
+            expression { return params.BVT == true }
+            expression { return params.PROD == true }
          }
          steps{
-             script {
-                withCredentials([string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY'),
-                                 string(credentialsId: 'ICR_CPOPEN', variable: 'CPOPEN_KEY')]) {
-                   if ( env.BVT_STATUS == "SUCCESS" ) {
-                      echo "BVT SUCCESSFUL, PROMOTING TO ICR"
-                      sh '''
-                         # PROMOTE TO ICR STAGING
-                         skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER} \
-                                     docker://${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER} \
-                                     --src-creds iamapikey:${ICR_KEY} \
-                                     --dest-creds iamapikey:${CPOPEN_KEY} \
-                                     --all
+            script {
+               withCredentials([string(credentialsId: 'JAMES_ICR_STAGING', variable: 'ICR_KEY'),
+                                string(credentialsId: 'ICR_CPOPEN', variable: 'CPOPEN_KEY')]) {
+                  if ( env.BVT_STATUS == "SUCCESS" ) {
+                     dir ("${IMAGE_NAME}"){
+                        echo "BVT SUCCESSFUL, PROMOTING TO ICR"
+                        sh '''
+                           # PROMOTE TO ICR STAGING
+                           skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${CPD_VER} \
+                                       docker://${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER} \
+                                       --src-creds iamapikey:${ICR_KEY} \
+                                       --dest-creds iamapikey:${CPOPEN_KEY} \
+                                       --all
                                         
-                         # VERIFY FAT MANIFEST
-                         ${DOCKER_EXE} login ${PROD_REGISTRY} -u iamapikey -p ${CPOPEN_KEY}
-                         ${DOCKER_EXE} manifest inspect ${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
+                           # VERIFY FAT MANIFEST
+                           ${DOCKER_EXE} login ${PROD_REGISTRY} -u iamapikey -p ${CPOPEN_KEY}
+                           ${DOCKER_EXE} manifest inspect ${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
                          
-                         git status
-                         git branch
-                         tag_name="${IMAGE_NAME}-${TAG_ID}"
-                         tag_message="${IMAGE_NAME} BUILD: ${TAG_ID}"
-                         git tag -a ${tag_name} -m "${tag_message}" -f
-                         git push origin ${tag_name} -f
-                      '''
-                   }
-                   else {
+                           git status
+                           git branch
+                           tag_name="${IMAGE_NAME}-${TAG_ID}"
+                           tag_message="${IMAGE_NAME} BUILD: ${TAG_ID}"
+                           git tag -a ${tag_name} -m "${tag_message}" -f
+                           git push origin ${tag_name} -f
+                        '''
+                     }
+                  }
+                  else {
                       echo "BVT FAILED, NOT PROMOTING TO ICR"
-                   }
-                }
-             }
+                  }
+               }
+            }
          }
       }
       stage('RUN POST BUILD STEPS'){
