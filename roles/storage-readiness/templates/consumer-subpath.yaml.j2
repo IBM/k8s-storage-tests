@@ -30,7 +30,7 @@ spec:
 {% endif %}
       containers:
       - name: consumer-job
-        image: {{ imageurl }}
+        image: {{ storage_val_image }}
         imagePullPolicy: "IfNotPresent"
         env:
           - name: FILE_NAME

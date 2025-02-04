@@ -64,13 +64,13 @@ RUN chown ${EXTRA_UID}:${EXTRA_GID} /home/cpuser/gidtest.txt && \
     chown 3000:3000 /home/cpuser/sgtest.txt
 ###
 
-RUN microdnf install -y --nodocs python3.11-setuptools-wheel python3.11-pip-wheel tar gzip util-linux-core \
+RUN microdnf install -y --nodocs python3.12-setuptools-wheel python3.12-pip-wheel tar gzip util-linux-core \
     && export PIP_NO_CACHE_DIR=1 PIP_ROOT_USER_ACTION=ignore \
     && python3 -m ensurepip \
     && python3 -m pip install --upgrade pip setuptools \
     && python3 -m pip install openshift Jinja2 yasha argparse oauthlib \
     && python3 -m pip uninstall -y pip setuptools \
-    && rpm --erase --nodeps python3.11-setuptools-wheel python3.11-pip-wheel \
+    && rpm --erase --nodeps python3.12-setuptools-wheel python3.12-pip-wheel \
     && microdnf clean all && rm -rf /var/cache/* /var/log/dnf* /var/log/yum.* /usr/share/zoneinfo
 
 RUN curl -sL http://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz | tar xvz --directory /usr/local/bin/. \
