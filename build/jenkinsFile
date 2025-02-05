@@ -67,6 +67,7 @@ pipeline {
                                   dir ("${IMAGE_NAME}"){
                                      sh '''
                                         ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
                                  
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
@@ -189,6 +190,7 @@ pipeline {
                                   dir ("${IMAGE_NAME}"){
                                      sh '''
                                         ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
                                      
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
@@ -309,6 +311,7 @@ pipeline {
                                   dir ("${IMAGE_NAME}"){
                                      sh '''
                                         ${DOCKER_EXE} login -u ${DOCKER_USER} -p ${DOCKER_PASS} docker.io
+                                        ${DOCKER_EXE} login cp.stg.icr.io -u iamapikey -p ${ICR_KEY}
                                      
                                         # Docker Images Before Build
                                         ${DOCKER_EXE} images
