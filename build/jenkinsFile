@@ -503,7 +503,17 @@ pipeline {
                                        --src-creds iamapikey:${ICR_KEY} \
                                        --dest-creds iamapikey:${CPOPEN_KEY} \
                                        --all
-                                        
+
+                           for p in $PLATFORMS
+                           do 
+                              # TAG IMAGES WITH CPD_VER
+                              skopeo copy --preserve-digests --format=v2s2 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${p} \
+                                          docker://${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${p} \
+                                          --src-creds iamapikey:${ICR_KEY} \
+                                          --dest-creds iamapikey:${CPOPEN_KEY} \
+                                          --all
+                           done
+                           
                            # VERIFY FAT MANIFEST
                            ${DOCKER_EXE} login ${PROD_REGISTRY} -u iamapikey -p ${CPOPEN_KEY}
                            ${DOCKER_EXE} manifest inspect ${PROD_REGISTRY}/${IMAGE_NAME}:${CPD_VER}
