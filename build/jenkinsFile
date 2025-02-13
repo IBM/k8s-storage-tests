@@ -16,10 +16,8 @@ pipeline {
       PROD_REGISTRY="icr.io/cpopen/cpd"
       
       /////Mend OSS Scan variables/////
-      WS_PRODUCTNAME = 'PSIRT_PRD0004031'
-      WS_PROJECTNAME = "${IMAGE_NAME}_${CP4D_VERSION}"
-      WS_JAR_URL = 'https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar'
-      WS_WSS_URL = 'https://ibmets.whitesourcesoftware.com/agent'
+      MEND_PRODUCTNAME = 'PSIRT_PRD0004031'
+      MEND_PROJECTNAME = "${IMAGE_NAME}_${CP4D_VERSION}"
             
       //VERSION TAGS TO BE USED BY THE BUILD - PASSED IN FROM JENKINS
       CPD_VER="${CP4D_VERSION}"
@@ -545,11 +543,12 @@ pipeline {
                }
                steps {
                   script {
-                     withCredentials([ string(credentialsId: 'mend_userkey', variable: 'WS_USERKEY'),
+                     withCredentials([ string(credentialsId: 'mend_userkey', variable: 'MEND_USER_KEY'),
                                  string(credentialsId: "ws_apikey", variable: 'WS_APIKEY'),
                                  string(credentialsId: "sonar_storage-tests", variable: 'SONAR_KEY') ]){
                         dir ("${IMAGE_NAME}"){
-                           sh './build/mend.sh'
+                           sh 'scp jenkins@icpfs1.svl.ibm.com:/pool1/data1/zen/scan_reports/Mend/mend.sh ${WORKSPACE}/build/mend.sh'
+                           sh '${WORKSPACE}/build/mend.sh'
                            sh './build/sonar.sh'
                         }
                      }
