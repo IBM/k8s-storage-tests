@@ -8,11 +8,9 @@ pipeline {
       BUNDLE_GHE_URL="git@github.ibm.com:PrivateCloud-analytics/ibm-cp4d-cpd-cli-bundle.git"
 
       //DOCKER REPOS
-      DOCKER_REGISTRY="docker-na.artifactory.swg-devops.com/hyc-cp4d-team-bootstrap-2-docker-local"
-      DOCKER_REPO="ibm_cpd_zen"
       IMAGE_NAME="k8s-storage-test"
       DEV_REGISTRY="cp.stg.icr.io/cp/cpd"
-      QUAY_REGISTRY="quay.io/jammurp"      
+      DOCKER_REGISTRY="quay.io/jammurp"      
       PROD_REGISTRY="icr.io/cpopen/cpd"
       
       /////Mend OSS Scan variables/////
@@ -31,7 +29,7 @@ pipeline {
             script {
                env.TIME_STAMP = sh(script: 'echo `date +"%Y%m%d.%H%M%S"`', returnStdout:true).trim()
                env.TAG_ID="${CPD_VER}.${TIME_STAMP}.${BUILD_NUMBER}"
-               env.DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_REPO}/${IMAGE_NAME}"
+               env.DOCKER_IMAGE="${DOCKER_REGISTRY}/${IMAGE_NAME}"
                env.DOCKER_EXE="podman"
                currentBuild.displayName="BRANCH:${BRANCH}-BUILD_ID:${env.TAG_ID}"
             }
@@ -88,32 +86,21 @@ pipeline {
                          }
                       }
                    }
-                   stage('Deploy Image x86_64 to artifactory') {
+                   stage('Deploy Image x86_64 to QUAY') {
                       steps{
                          script{
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=amd64']){
-                              withCredentials([usernamePassword(credentialsId: 'JAMES_ARTIFACTORY', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_KEY'),
-                                               usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                              withCredentials([usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
-                                    # PUSH IMAGE TO ARTIFACTORY
-                                    ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${ARTIFACTORY_USER} -p ${ARTIFACTORY_KEY}
-                                    ${DOCKER_EXE} push --format=v2s2 ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE}
-                                    
                                     # PUSH IMAGE TO QUAY
-                                    ${DOCKER_EXE} login ${QUAY_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
-                                    ${DOCKER_EXE} tag ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} ${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
-                                    ${DOCKER_EXE} push --format=v2s2 ${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
+                                    ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
+                                    ${DOCKER_EXE} tag ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
+                                    ${DOCKER_EXE} push --format=v2s2 ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
                                                  
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} \
-                                                docker://${DOCKER_IMAGE}:${CPD_VER}.${ARC_TYPE} \
-                                                --src-creds ${ARTIFACTORY_USER}:${ARTIFACTORY_KEY} \
-                                                --dest-creds ${ARTIFACTORY_USER}:${ARTIFACTORY_KEY} \
-                                                --all
- 
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
-                                                docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${ARC_TYPE} \
+                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
+                                                docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${ARC_TYPE} \
                                                 --src-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --dest-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --all
@@ -137,7 +124,7 @@ pipeline {
                                                usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO ICR STAGING
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
+                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
                                                 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
                                                 --src-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --dest-creds iamapikey:${ICR_KEY} \
@@ -211,32 +198,21 @@ pipeline {
                          }
                       }
                    }
-                   stage('Deploy Image ppc64le to artifactory') {
+                   stage('Deploy Image ppc64le to QUAY') {
                       steps{
                          script{
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=ppc64le']){
-                              withCredentials([usernamePassword(credentialsId: 'JAMES_ARTIFACTORY', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_KEY'),
-                                               usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                              withCredentials([usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
-                                    # PUSH IMAGE TO ARTIFACTORY
-                                    ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${ARTIFACTORY_USER} -p ${ARTIFACTORY_KEY}
-                                    ${DOCKER_EXE} push --format=v2s2 ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE}
-                                    
                                     # PUSH IMAGE TO QUAY
-                                    ${DOCKER_EXE} login ${QUAY_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
-                                    ${DOCKER_EXE} tag ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} ${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
-                                    ${DOCKER_EXE} push --format=v2s2 ${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
+                                    ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
+                                    ${DOCKER_EXE} tag ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
+                                    ${DOCKER_EXE} push --format=v2s2 ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
                                                  
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} \
-                                                docker://${DOCKER_IMAGE}:${CPD_VER}.${ARC_TYPE} \
-                                                --src-creds ${ARTIFACTORY_USER}:${ARTIFACTORY_KEY} \
-                                                --dest-creds ${ARTIFACTORY_USER}:${ARTIFACTORY_KEY} \
-                                                --all
- 
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
-                                                docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${ARC_TYPE} \
+                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
+                                                docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${ARC_TYPE} \
                                                 --src-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --dest-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --all
@@ -260,7 +236,7 @@ pipeline {
                                                usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO ICR STAGING
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
+                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
                                                 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
                                                 --src-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --dest-creds iamapikey:${ICR_KEY} \
@@ -338,26 +314,15 @@ pipeline {
                             echo "NODE_NAME = ${env.NODE_NAME}"
 
                             withEnv(['ARC_TYPE=s390x']){
-                              withCredentials([usernamePassword(credentialsId: 'JAMES_ARTIFACTORY', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_KEY'),
-                                               usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
+                              withCredentials([usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
-                                    # PUSH IMAGE TO ARTIFACTORY
-                                    ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${ARTIFACTORY_USER} -p ${ARTIFACTORY_KEY}
-                                    ${DOCKER_EXE} push --format=v2s2 ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE}
-                                    
                                     # PUSH IMAGE TO QUAY
-                                    ${DOCKER_EXE} login ${QUAY_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
-                                    ${DOCKER_EXE} tag ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} ${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
-                                    ${DOCKER_EXE} push --format=v2s2 ${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
+                                    ${DOCKER_EXE} login ${DOCKER_REGISTRY} -u ${QUAY_USER} -p ${QUAY_KEY}
+                                    ${DOCKER_EXE} tag ${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
+                                    ${DOCKER_EXE} push --format=v2s2 ${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE}
                                                  
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_IMAGE}:${TAG_ID}.${ARC_TYPE} \
-                                                docker://${DOCKER_IMAGE}:${CPD_VER}.${ARC_TYPE} \
-                                                --src-creds ${ARTIFACTORY_USER}:${ARTIFACTORY_KEY} \
-                                                --dest-creds ${ARTIFACTORY_USER}:${ARTIFACTORY_KEY} \
-                                                --all
- 
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
-                                                docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${ARC_TYPE} \
+                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
+                                                docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${CPD_VER}.${ARC_TYPE} \
                                                 --src-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --dest-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --all
@@ -381,7 +346,7 @@ pipeline {
                                                usernamePassword(credentialsId: 'JAMES_QUAY', usernameVariable: 'QUAY_USER', passwordVariable: 'QUAY_KEY')]) {
                                  sh '''
                                     # PUSH IMAGE TO ICR STAGING
-                                    skopeo copy --preserve-digests --format=v2s2 docker://${QUAY_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
+                                    skopeo copy --preserve-digests --format=v2s2 docker://${DOCKER_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
                                                 docker://${DEV_REGISTRY}/${IMAGE_NAME}:${TAG_ID}.${ARC_TYPE} \
                                                 --src-creds ${QUAY_USER}:${QUAY_KEY} \
                                                 --dest-creds iamapikey:${ICR_KEY} \
