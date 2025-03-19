@@ -10,7 +10,7 @@ pipeline {
       //DOCKER REPOS
       IMAGE_NAME="k8s-storage-test"
       DEV_REGISTRY="cp.stg.icr.io/cp/cpd"
-      DOCKER_REGISTRY="cpd-quay.svl.ibm.com/cpd-cli"      
+      DOCKER_REGISTRY="cpd-quay.svl.ibm.com/cpd-cli"
       PROD_REGISTRY="icr.io/cpopen/cpd"
       
       /////Mend OSS Scan variables/////
@@ -510,13 +510,15 @@ pipeline {
                   script {
                      withCredentials([ string(credentialsId: 'mend_userkey', variable: 'MEND_USER_KEY'),
                                  string(credentialsId: "ws_apikey", variable: 'WS_APIKEY'),
-                                 string(credentialsId: "sonar_storage-tests", variable: 'SONAR_KEY') ]){
+                                 string(credentialsId: "sonar_swcore-pe1", variable: 'SONAR_KEY'),
+                                 string(credentialsId: "sonar_cert_pw", variable: 'SONAR_CERT_PW'),
+                                 string(credentialsId: "sonar_storage-tests", variable: 'PROJECT_KEY') ]){
                         dir ("${IMAGE_NAME}"){
+                           sh './build/sonar.sh'
                            sh '''
                               mkdir -p ${WORKSPACE}/build
                               scp jenkins@icpfs1.svl.ibm.com:/pool1/data1/zen/scan_reports/Mend/mend.sh ${WORKSPACE}/build/mend.sh
                               ${WORKSPACE}/build/mend.sh
-                              ./build/sonar.sh
                            '''
                         }
                      }
