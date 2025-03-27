@@ -9,7 +9,14 @@ docker_tag=${TAG_ID:-"latest"}
 arch_type=${ARC_TYPE:-`uname -m`}
 
 dockerexe=${DOCKER_EXE:-podman}
-nocache=${DEV_NOCACHE:-"--no-cache --pull"}
+
+if ${dockerexe} == "podman"
+then
+   nocache=${DEV_NOCACHE:-"--no-cache --pull=always"}
+else
+   nocache=${DEV_NOCACHE:-"--no-cache --pull"}
+fi
+
 ${dockerexe} build --format docker ${nocache} -f ${docker_file_name} \
              -t ${docker_image}:${docker_tag}.${arch_type} \
              --build-arg "architecture=${arch_type}" .
