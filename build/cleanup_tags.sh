@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ $# -ne 3 ]; then
-  echo "Error: This script requires exactly one argument."
+  echo "Error: This script requires exactly three arguments."
   echo "Usage: cleanup.sh upstream/origin <IMAGE-NAME> <CP4D-VERSION>"
-  echo "Example: ./cleanup.sh upstream k8s-storage-test 5.1.1"
+  echo "Example: ./cleanup_tags.sh upstream k8s-storage-test 5.1.2"
   exit 1
 fi
 
