@@ -73,7 +73,10 @@ RUN microdnf install -y --nodocs python3.12-setuptools-wheel python3.12-pip-whee
     && rpm --erase --nodeps python3.12-setuptools-wheel python3.12-pip-wheel \
     && microdnf clean all && rm -rf /var/cache/* /var/log/dnf* /var/log/yum.* /usr/share/zoneinfo
 
-RUN curl -sL http://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz | tar xvz --directory /usr/local/bin/. \
+COPY oc.tgz /usr/local/bin
+RUN cd /usr/local/bin \
+    && tar -xvz oc.tgz \
+    && rm -f oc.tgz \
     && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
 

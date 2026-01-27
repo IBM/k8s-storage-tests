@@ -10,7 +10,9 @@ arch_type=${ARC_TYPE:-`uname -m`}
 
 dockerexe=${DOCKER_EXE:-podman}
 
-if ${dockerexe} == "podman"
+curl -sL https://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz -o oc.tgz
+
+if [[ "${dockerexe}" == "podman" ]]
 then
    nocache=${DEV_NOCACHE:-"--no-cache --pull=always"}
 else
