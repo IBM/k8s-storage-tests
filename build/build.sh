@@ -10,7 +10,7 @@ arch_type=${ARC_TYPE:-`uname -m`}
 
 dockerexe=${DOCKER_EXE:-podman}
 
-curl -sL https://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARCHITECTURE}/go-latest/oc.tgz -o oc.tgz
+curl -sL https://icpfs1.svl.ibm.com/zen/rebuild-binaries/oc/latest/${ARC_TYPE}/go-latest/oc.tgz -o oc.tgz
 
 if [[ "${dockerexe}" == "podman" ]]
 then
