@@ -75,7 +75,7 @@ RUN microdnf install -y --nodocs python3.12-setuptools-wheel python3.12-pip-whee
 
 COPY oc.tgz /usr/local/bin
 RUN cd /usr/local/bin \
-    && tar -xvz oc.tgz \
+    && tar -xvzf oc.tgz \
     && rm -f oc.tgz \
     && chown -R ${USER_UID}:0 ${HOME} && chmod -R ug+rwx ${HOME}
 
