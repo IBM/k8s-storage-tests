@@ -1,12 +1,4 @@
-# REQUIRED PARAMETERS
-storageClass_ReadWriteOnce: <required> # eg "ocs-storagecluster-ceph-rbd"
-storageClass_ReadWriteMany: <required> # eg "ocs-storagecluster-cephfs"
-namespace: <required>
+---
+# defaults file for roles/storage-readiness
 
-# OPTIONAL
-prefix: "readiness"
-storageSize: "1Gi"
-options: ""
-backoffLimit: 5
-
-run_storage_readiness: true
+storage_val_image: "{{ validation_imageurl if validation_imageurl is defined else imageurl }}"
