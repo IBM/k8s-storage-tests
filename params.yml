@@ -1,6 +1,6 @@
 
 # OCP Parameters
-ocp_url: https://<required>:6443
+ocp_url: <required>
 ocp_username: <required>  # a cluster admin user
 ocp_password: <required>
 ocp_token: <required if user/password not available>
@@ -22,7 +22,11 @@ backoffLimit: 5
 
 arch: amd64  # amd64, ppc64le
 
-docker_registry: "quay.io"
+docker_registry: "icr.io"
+
+# Image URL for validation tests
+# Version tracks the https://github.com/IBM/cpd-cli/releases CPD (current is 5.3.1)
+imageurl: "icr.io/cpopen/cpd/k8s-storage-test:5.3.1"
 
 ############################ STORAGE VALIDATION PARAMETERS END ##########################
 
